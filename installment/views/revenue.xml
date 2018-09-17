@@ -16,6 +16,7 @@
                         </div>
                         <group>
                             <field name="number_of_months"/>
+                            <field name="purchase_type"/>
                         </group>
                         <group string="Covered Categories">
                             <field name="covered_category_ids" nolabel="1" mode="tree">

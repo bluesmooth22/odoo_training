@@ -9,7 +9,7 @@
     'website': "http://www.yourcompany.com",
     'category': 'Uncategorized',
     'version': '0.1',
-    'depends': ['base','sale','account','product'],
+    'depends': ['base','sale','account','product', 'account_accountant', 'stock'],
     'data': [
         # 'security/ir.model.access.csv',
         'views/view.xml',
