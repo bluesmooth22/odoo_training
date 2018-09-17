@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_tax_form_inherit" model="ir.ui.view">
+            <field name="name">account.tax.form</field>
+            <field name="model">account.tax</field>
+            <field name="inherit_id" ref="account.view_tax_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//notebook/page[1]/group[1]/group[1]" position="replace">
+                    <group>
+                        <field name="amount_type"/>
+                        <label for="amount" attrs="{'invisible':[('amount_type','not in', ('fixed', 'percent', 'division', 'vat'))]}"/>
+                        <div attrs="{'invisible':[('amount_type','not in', ('fixed', 'percent', 'division', 'vat'))]}">
+                            <field name="amount" class="oe_inline"/>
+                            <label string="%" class="oe_inline" attrs="{'invisible':[('amount_type','=','fixed')]}"/>
+                        </div>
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

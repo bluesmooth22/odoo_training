@@ -15,5 +15,6 @@
         'views/view.xml',
         'views/sales.xml',
         'views/revenue.xml',
+        'views/tax.xml',
     ],
 }

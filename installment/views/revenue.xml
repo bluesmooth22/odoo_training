@@ -28,7 +28,7 @@
                                         <field name="advance_payment"/>
                                     </group>
                                     <group>
-                                        <field name="interest_rate_type"/>
+                                        <field name="interest_type"/>
                                         <field name="interest_rate"/>
                                     </group>
                                     </group>
@@ -37,10 +37,28 @@
                                     <field name="product_category_id"/>
                                     <field name="advance_payment_type"/>
                                     <field name="advance_payment"/>
-                                    <field name="interest_rate_type"/>
+                                    <field name="interest_type"/>
                                     <field name="interest_rate"/>
                                 </tree>
                             </field>
+                        </group>
+                        <group string="Discount">
+                            <label for="spot_adv_discount" string="Paid-up Advance"/>
+                            <div>
+                                <field name="spot_adv_discount" class="oe_inline"/>
+                                <label for="oe_inline" string="%"/>
+                            </div>
+                            <label for="deferred_adv_discount" string="Deferred Advance"/>
+                            <div>
+                                <field name="deferred_adv_discount" class="oe_inline"/>
+                                <label for="oe_inline" string="%"/>
+                            </div>
+                            <label for="deferred_adv_count" string="Deferred Advance Count"/>
+                            <div>
+                                <field name="deferred_adv_count" class="oe_inline"/>
+                                <label for="oe_inline" string="mons"/>
+                            </div>
+
                         </group>
                     </sheet>
                 </form>
