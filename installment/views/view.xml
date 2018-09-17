@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="installment_root" name="Installment"/>
+        <menuitem id="installment_sales_category" name="Sales" parent="installment_root" sequence="0"/>
+        <menuitem id="installment_invoice_category" name="Invoicing" parent="installment_root" sequence="0"/>
+        <menuitem id="installment_reports_category" name="Reports" parent="installment_root" sequence="0"/>
+        <menuitem id="installment_configuration_category" name="Configuration" parent="installment_root" sequence="0"/>
+    </data>
+</odoo>

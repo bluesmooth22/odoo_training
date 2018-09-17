@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="deferred_revenue_custom_form_view" model="ir.ui.view">
+            <field name="name">deferred.revenue.custom</field>
+            <field name="model">deferred.revenue.custom</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" placeholder="......"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="number_of_months"/>
+                        </group>
+                        <group string="Covered Categories">
+                            <field name="covered_category_ids" nolabel="1" mode="tree">
+                                <form>
+                                    <group>
+                                        <group>
+                                        <field name="product_category_id"/>
+                                        <field name="advance_payment_type"/>
+                                        <field name="advance_payment"/>
+                                    </group>
+                                    <group>
+                                        <field name="interest_rate_type"/>
+                                        <field name="interest_rate"/>
+                                    </group>
+                                    </group>
+                                </form>
+                                <tree editable="bottom">
+                                    <field name="product_category_id"/>
+                                    <field name="advance_payment_type"/>
+                                    <field name="advance_payment"/>
+                                    <field name="interest_rate_type"/>
+                                    <field name="interest_rate"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="deferred_revenue_custom_action_view" model="ir.actions.act_window">
+            <field name="name">Installment Payments Setting</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">deferred.revenue.custom</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="installment_payments_setting_menu" name="Installment Payments Setting" parent="installment_configuration_category" action="deferred_revenue_custom_action_view" sequence=""/>
+
+    </data>
+</odoo>
