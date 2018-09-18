@@ -4,7 +4,7 @@
 
         <record id="installment_sale_order_form" model="ir.ui.view">
             <field name="name">installment.sale</field>
-            <field name="model">sale.order</field>
+            <field name="model">installment.sale</field>
             <field name="arch" type="xml">
                 <form string="Sales Order" class="o_sale_order">
                     <header>
@@ -112,8 +112,10 @@
                                     </form>
                                     <tree string="Sales Order Lines" editable="bottom" decoration-info="invoice_status=='to invoice'">
                                         <field name="sequence" widget="handle"/>
-                                        <field name="product_id" domain="[('categ_id', '=', parent.product_category_id)]" attrs="{'readonly': ['|', ('qty_invoiced', '&gt;', 0), ('procurement_ids', '!=', [])]}" context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"
-                                           />
+                                        <!--domain="[('categ_id', '=', parent.product_category_id)]"-->
+                                        <field name="product_id"
+                                               attrs="{'readonly': ['|', ('qty_invoiced', '&gt;', 0), ('procurement_ids', '!=', [])]}"
+                                               context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"/>
                                         <field name="layout_category_id" groups="sale.group_sale_layout"/>
                                         <field name="name"/>
                                         <field name="product_uom_qty"
@@ -135,8 +137,8 @@
                                         <field name="tax_id" widget="many2many_tags" domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]"
                                             attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
                                         <field name="discount" groups="sale.group_discount_per_so_line"/>
-                                        <field name="installment_price_subtotal" widget="monetary" groups="sale.group_show_price_subtotal"/>
-                                        <field name="installment_price_total" widget="monetary" groups="sale.group_show_price_total"/>
+                                        <field name="price_subtotal" widget="monetary" groups="sale.group_show_price_subtotal"/>
+                                        <field name="price_total" widget="monetary" groups="sale.group_show_price_total"/>
                                         <field name="qty_delivered_updateable" invisible="1"/>
                                         <field name="procurement_ids" invisible="1"/>
                                         <field name="state" invisible="1"/>
@@ -205,7 +207,7 @@
 
         <record id="installment_sale_tree_view" model="ir.ui.view">
             <field name="name">installment.sale</field>
-            <field name="model">sale.order</field>
+            <field name="model">installment.sale</field>
             <field name="arch" type="xml">
                 <tree string="Quotation" class="o_sale_order" decoration-bf="message_needaction==True" decoration-muted="state=='cancel'">
                     <field name="message_needaction" invisible="1"/>
@@ -223,7 +225,7 @@
         <record id="installment_sale_action_view" model="ir.actions.act_window">
             <field name="name">Installment Sales</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">sale.order</field>
+            <field name="res_model">installment.sale</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="installment_sale_tree_view"/>
         </record>
