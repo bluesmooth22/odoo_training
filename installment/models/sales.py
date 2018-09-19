@@ -117,7 +117,7 @@ class InstallmentSales(models.Model):
                                          help="The analytic account related to a sales order.")
 
     order_line = fields.One2many('sale.order.line', 'order_id', string='Order Lines',
-                                 states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, copy=True)
+                                 states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, copy=True, limit=1)
 
     invoice_count = fields.Integer(string='# of Invoices', compute='_get_invoiced', readonly=True)
     invoice_ids = fields.Many2many("account.invoice", string='Invoices', compute="_get_invoiced", readonly=True,
@@ -130,13 +130,6 @@ class InstallmentSales(models.Model):
     ], string='Invoice Status', compute='_get_invoiced', store=True, readonly=True)
 
     note = fields.Text('Terms and conditions', default=_default_note)
-
-    amount_untaxed = fields.Monetary(string='Untaxed Amount', store=True, readonly=True, compute='_amount_all',
-                                     track_visibility='always')
-    amount_tax = fields.Monetary(string='Taxes', store=True, readonly=True, compute='_amount_all',
-                                 track_visibility='always')
-    amount_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_amount_all',
-                                   track_visibility='always')
 
     payment_term_id = fields.Many2one('account.payment.term', string='Payment Terms', oldname='payment_term')
     fiscal_position_id = fields.Many2one('account.fiscal.position', oldname='fiscal_position', string='Fiscal Position')
@@ -168,11 +161,11 @@ class InstallmentSales(models.Model):
 
     deferred_revenue_id = fields.Many2one('deferred.revenue.custom', 'Purchase Term',)
 
-    installment_amount_untaxed = fields.Monetary(string='Untaxed Amount', store=True, readonly=True, compute='_compute_installment_amount',
+    amount_untaxed = fields.Monetary(string='Untaxed Amount', store=True, readonly=True, compute='_compute_installment_amount',
                                      track_visibility='always')
-    installment_amount_tax = fields.Monetary(string='Taxes', store=True, readonly=True, compute='_compute_installment_amount',
+    amount_tax = fields.Monetary(string='Taxes', store=True, readonly=True, compute='_compute_installment_amount',
                                  track_visibility='always')
-    installment_amount_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_compute_installment_amount',
+    amount_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_compute_installment_amount',
                                    track_visibility='always')
 
     advance_payment = fields.Monetary(string='Advance', store=True, readonly=True, compute='_compute_installment_amount',
@@ -190,6 +183,21 @@ class InstallmentSales(models.Model):
                                  track_visibility='always')
     perpetual = fields.Monetary(string='PCF', store=True, readonly=True, compute='_compute_installment_amount',
                                  track_visibility='always')
+
+    @api.multi
+    def _compute_order_line(self):
+        price_subtotal = 0.0
+        for order in self:
+            if order.is_spot_advance:
+                price_subtotal = order.spot_advance + (
+                        order.monthly_amortization * order.deferred_revenue_id.number_of_months)
+            elif order.is_deferred_advance:
+                price_subtotal = (order.deferred_advance * order.deferred_revenue_id.deferred_adv_count) + (
+                            order.monthly_amortization * order.deferred_revenue_id.number_of_months)
+            for line in order.order_line:
+                line.update({
+                    'installment_price_subtotal': price_subtotal,
+                })
 
 
     @api.depends('product_category_id', 'purchase_type', 'deferred_revenue_id', 'order_line', 'is_spot_advance', 'is_deferred_advance')
@@ -219,6 +227,7 @@ class InstallmentSales(models.Model):
                 'deferred_advance': def_val,
                 'monthly_amortization': monthly_amortization,
             })
+            order._compute_order_line()
 
     @api.onchange('is_spot_advance')
     def _onchange_is_spot_advance(self):

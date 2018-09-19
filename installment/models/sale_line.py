@@ -14,19 +14,17 @@ class InstallmentSaleLine(models.Model):
     # installment_order_id = fields.Many2one('installment.sale', string='Order Reference', required=True,
     #                                        ondelete='cascade', index=True,
     #                                        copy=False)
-    installment_price_subtotal = fields.Monetary(compute='_compute_installment_amount', string='Subtotal', readonly=True, store=True)
-    installment_price_tax = fields.Monetary(compute='_compute_installment_amount', string='Taxes', readonly=True, store=True)
-    installment_price_total = fields.Monetary(compute='_compute_installment_amount', string='Total', readonly=True, store=True)
+    installment_price_subtotal = fields.Monetary(string='Subtotal', readonly=True, store=True)
+    installment_price_tax = fields.Monetary(string='Taxes', readonly=True, store=True)
+    installment_price_total = fields.Monetary(string='Total', readonly=True, store=True)
 
     @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id')
     def _compute_installment_amount(self):
         for line in self:
-            price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
 
             line.update({
                 'installment_price_tax': '',
                 'installment_price_total': '',
-                'installment_price_subtotal': '',
             })
 
 
